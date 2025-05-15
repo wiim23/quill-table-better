@@ -57,6 +57,7 @@ class Table extends Module {
   tableMenus: TableMenus;
   tableSelect: TableSelect;
   options: Options;
+  public scale: number;
   
   static keyboardBindings: { [propName: string]: BindingObject };
   
@@ -370,6 +371,10 @@ function removeLine(line: Line, range: Range) {
   return false;
 }
 
+public setScale(newScale: number): void {
+  this.scale = newScale;
+}
+  
 Table.keyboardBindings = keyboardBindings;
 
 export default Table;
