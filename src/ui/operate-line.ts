@@ -245,6 +245,7 @@ class OperateLine {
       this.createDragBlock();
     } else {
       if (this.drag || !cellNode) return;
+      console.log(options);
       this.updateProperty(options);
     }
   }
