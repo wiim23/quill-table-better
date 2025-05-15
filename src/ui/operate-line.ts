@@ -95,12 +95,14 @@ class OperateLine {
     height = (height / (scale * 100)) * 100;
     
     let containerRect = this.quill.container.getBoundingClientRect();
-    containerRect.top = (containerRect.top / (scale * 100)) * 100;
-    containerRect.left = (containerRect.left / (scale * 100)) * 100;
+    let sContainerRect = {
+      top = (containerRect.top / (scale * 100)) * 100,
+      left = (containerRect.left / (scale * 100)) * 100
+    }
     
     return {
-      left: `${left - containerRect.left}px`,
-      top: `${top - containerRect.top}px`,
+      left: `${left - sContainerRect.left}px`,
+      top: `${top - sContainerRect.top}px`,
       width: `${width}px`,
       height: `${height}px`,
       display: 'block'
@@ -132,32 +134,38 @@ class OperateLine {
   getProperty(options: Options) {
     const scale = this.tableBetter.scale;
     let containerRect = this.quill.container.getBoundingClientRect();
-    containerRect.top = (containerRect.top / (scale * 100)) * 100;
-    containerRect.bottom = (containerRect.bottom / (scale * 100)) * 100;
-    containerRect.left = (containerRect.left / (scale * 100)) * 100;
-    containerRect.height = (containerRect.height / (scale * 100)) * 100;
-    containerRect.width = (containerRect.width / (scale * 100)) * 100;
+    let sContainerRect = {
+      top: (containerRect.top / (scale * 100)) * 100,
+      bottom: (containerRect.bottom / (scale * 100)) * 100,
+      left: (containerRect.left / (scale * 100)) * 100,
+      height: (containerRect.height / (scale * 100)) * 100,
+      width: (containerRect.width / (scale * 100)) * 100    
+    }
     
     const { tableNode, cellNode, mousePosition } = options;
     const { clientX, clientY } = mousePosition;
     let tableRect = tableNode.getBoundingClientRect();
-    tableRect.right = (dragBlockProps.right / (scale * 100)) * 100;
-    tableRect.bottom = (dragBlockProps.bottom / (scale * 100)) * 100;
+    let sTableRect = {
+      right: (dragBlockProps.right / (scale * 100)) * 100,
+      bottom: (dragBlockProps.bottom / (scale * 100)) * 100
+    };
     
     let cellRect = cellNode.getBoundingClientRect();
-    cellRect.left = (cellRect.left / (scale * 100)) * 100;
-    cellRect.width = (cellRect.width / (scale * 100)) * 100;
-    cellRect.top = (cellRect.top / (scale * 100)) * 100;
-    cellRect.height = (cellRect.height / (scale * 100)) * 100;
+    let sCellRect = {
+      left: (cellRect.left / (scale * 100)) * 100,
+      width: (cellRect.width / (scale * 100)) * 100,
+      top: (cellRect.top / (scale * 100)) * 100,
+      height: (cellRect.height / (scale * 100)) * 100
+    };
     
-    const x = cellRect.left + cellRect.width;
-    const y = cellRect.top + cellRect.height;
+    const x = sCellRect.left + sCellRect.width;
+    const y = sCellRect.top + sCellRect.height;
     const dragBlockProps = {
       width: `${DRAG_BLOCK_WIDTH}px`,
       height: `${DRAG_BLOCK_HEIGHT}px`,
-      top: `${tableRect.bottom - containerRect.top}px`,
-      left: `${tableRect.right - containerRect.left}px`,
-      display: tableRect.bottom > containerRect.bottom ? 'none' : 'block'
+      top: `${sTableRect.bottom - sContainerRect.top}px`,
+      left: `${sTableRect.right - sContainerRect.left}px`,
+      display: sTableRect.bottom > sContainerRect.bottom ? 'none' : 'block'
     }
 
     if (Math.abs(x - clientX) <= 5) {
@@ -166,9 +174,9 @@ class OperateLine {
         dragBlockProps,
         containerProps: {
           width: `${LINE_CONTAINER_WIDTH}px`,
-          height: `${containerRect.height}px`,
+          height: `${sContainerRect.height}px`,
           top: '0',
-          left: `${x - containerRect.left - LINE_CONTAINER_WIDTH / 2}px`,
+          left: `${x - sContainerRect.left - LINE_CONTAINER_WIDTH / 2}px`,
           display: 'flex',
           cursor: 'col-resize'
         },
@@ -182,9 +190,9 @@ class OperateLine {
       return {
         dragBlockProps,
         containerProps: {
-          width: `${containerRect.width}px`,
+          width: `${sContainerRect.width}px`,
           height: `${LINE_CONTAINER_HEIGHT}px`,
-          top: `${y - containerRect.top - LINE_CONTAINER_HEIGHT / 2}px`,
+          top: `${y - sContainerRect.top - LINE_CONTAINER_HEIGHT / 2}px`,
           left: '0',
           display: 'flex',
           cursor: 'row-resize'
@@ -458,13 +466,15 @@ class OperateLine {
   updateDragBlock(clientX: number, clientY: number) {
     const scale = this.tableBetter.scale;
     let containerRect = this.quill.container.getBoundingClientRect();
-    containerRect.top = (containerRect.top / (scale * 100)) * 100;
-    containerRect.left = (containerRect.left / (scale * 100)) * 100;
+    let sContainerRect = {
+      top: (containerRect.top / (scale * 100)) * 100,
+      left: (containerRect.left / (scale * 100)) * 100      
+    };
     
     this.dragBlock.classList.add('ql-operate-block-move');
     setElementProperty(this.dragBlock, {
-      top: `${~~(clientY - containerRect.top - DRAG_BLOCK_HEIGHT / 2)}px`,
-      left: `${~~(clientX - containerRect.left - DRAG_BLOCK_WIDTH / 2)}px`
+      top: `${~~(clientY - sContainerRect.top - DRAG_BLOCK_HEIGHT / 2)}px`,
+      left: `${~~(clientX - sContainerRect.left - DRAG_BLOCK_WIDTH / 2)}px`
     });
     this.updateDragTable(clientX, clientY);
   }
@@ -472,13 +482,15 @@ class OperateLine {
   updateDragLine(clientX: number, clientY: number) {
     const scale = this.tableBetter.scale;    
     let containerRect = this.quill.container.getBoundingClientRect();
-    containerRect.top = (containerRect.top / (scale * 100)) * 100;
-    containerRect.left = (containerRect.left / (scale * 100)) * 100;
+    let sContainerRect = {
+      top: (containerRect.top / (scale * 100)) * 100,
+      left: (containerRect.left / (scale * 100)) * 100      
+    };
     
     if (this.direction === 'level') {
-      setElementProperty(this.line, { left: `${~~(clientX - containerRect.left - LINE_CONTAINER_WIDTH / 2)}px` });
+      setElementProperty(this.line, { left: `${~~(clientX - sContainerRect.left - LINE_CONTAINER_WIDTH / 2)}px` });
     } else if (this.direction === 'vertical') {
-      setElementProperty(this.line, { top: `${(~~clientY - containerRect.top - LINE_CONTAINER_HEIGHT / 2)}px` });
+      setElementProperty(this.line, { top: `${(~~clientY - sContainerRect.top - LINE_CONTAINER_HEIGHT / 2)}px` });
     }
   }
 
