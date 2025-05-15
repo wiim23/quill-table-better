@@ -23,7 +23,6 @@ const DRAG_BLOCK_HEIGHT = 8;
 const DRAG_BLOCK_WIDTH = 8;
 const LINE_CONTAINER_HEIGHT = 5;
 const LINE_CONTAINER_WIDTH = 5;
-const SCALE = 1;
 
 class OperateLine {
   quill: Quill;
