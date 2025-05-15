@@ -1,0 +1,35 @@
+name: Build and Minify TypeScript
+
+on:
+  push:
+    branches: [ "main" ] # Déclenche le workflow lors d'un push sur la branche main (ou celle que tu utilises)
+  pull_request:
+    branches: [ "main" ] # Déclenche le workflow lors d'une pull request ciblant la branche main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile TypeScript
+        run: npx tsc
+
+      - name: Minify JavaScript
+        run: npx terser dist/*.js -m -c > dist/bundle.min.js # Assure-toi d'ajuster les chemins si nécessaire
+
+      - name: Upload minified JavaScript artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: minified-js
+          path: dist/bundle.min.js # Le chemin vers ton fichier JS minifié
