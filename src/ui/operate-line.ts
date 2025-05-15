@@ -70,12 +70,13 @@ class OperateLine {
     const line = document.createElement('div');
     container.classList.add('ql-operate-line-container');
     const { containerProps, lineProps } = this.getProperty(this.options);
+    console.log('la foire au boudin': {containerProps, lineProps});
     setElementProperty(container, containerProps);
     setElementProperty(line, lineProps);
     container.appendChild(line);
     this.quill.container.appendChild(container);
     this.line = container;
-    this.updateCell(container);    
+    this.updateCell(container);
   }
 
   getCorrectCol(colgroup: TableColgroup, sum: number) {
