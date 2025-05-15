@@ -144,7 +144,10 @@ class OperateLine {
     }
     
     const { tableNode, cellNode, mousePosition } = options;
-    const { clientX, clientY } = mousePosition;
+    let { clientX, clientY } = mousePosition;
+    clientX = (clientX / (scale * 100)) * 100;
+    clientY = (clientY / (scale * 100)) * 100;
+    
     let tableRect = tableNode.getBoundingClientRect();
     let sTableRect = {
       right: (tableRect.right / (scale * 100)) * 100,
