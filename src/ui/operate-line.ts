@@ -414,12 +414,15 @@ class OperateLine {
     const isLine = this.isLine(node);
     const handleDrag = (e: MouseEvent) => {
       e.preventDefault();
+      let clientX = (e.clientX / (scale * 100)) * 100;
+      let clientY = (e.clientY / (scale * 100)) * 100;
+      
       if (this.drag) {
         if (isLine) {
-          this.updateDragLine(e.clientX, e.clientY);
+          this.updateDragLine(clientX, clientY);
           this.hideDragBlock();
         } else {
-          this.updateDragBlock(e.clientX, e.clientY);
+          this.updateDragBlock(clientX, clientY);
           this.hideLine();
         }
       }
@@ -429,8 +432,10 @@ class OperateLine {
       e.preventDefault();
       const scale = this.tableBetter.scale;
       const { cellNode, tableNode } = this.options;
-      let clientX = (e.clientX / (scale * 100)) * 100;
-      let clientY = (e.clientY / (scale * 100)) * 100;
+      //let clientX = (e.clientX / (scale * 100)) * 100;
+      //let clientY = (e.clientY / (scale * 100)) * 100;
+      let clientX = parseFloat(this.dragBlock.style.left);
+      let clientY = parseFloat(this.dragBlock.style.top);
       
       if (isLine) {
         this.setCellRect(cellNode, clientX, clientY);
@@ -480,8 +485,6 @@ class OperateLine {
       top: (containerRect.top / (scale * 100)) * 100,
       left: (containerRect.left / (scale * 100)) * 100      
     };
-    clientX = (clientX / (scale * 100)) * 100;
-    clientY = (clientY / (scale * 100)) * 100;
     
     this.dragBlock.classList.add('ql-operate-block-move');
     setElementProperty(this.dragBlock, {
@@ -498,8 +501,6 @@ class OperateLine {
       top: (containerRect.top / (scale * 100)) * 100,
       left: (containerRect.left / (scale * 100)) * 100      
     };
-    clientX = (clientX / (scale * 100)) * 100;
-    clientY = (clientY / (scale * 100)) * 100;
     
     if (this.direction === 'level') {
       setElementProperty(this.line, { left: `${~~(clientX - sContainerRect.left - LINE_CONTAINER_WIDTH / 2)}px` });
@@ -513,8 +514,6 @@ class OperateLine {
     let { top, left } = this.dragTable.getBoundingClientRect();
     top = (top / (scale * 100)) * 100;
     left = (left / (scale * 100)) * 100;
-    clientX = (clientX / (scale * 100)) * 100;
-    clientY = (clientY / (scale * 100)) * 100;
     
     const width = clientX - left;
     const height = clientY - top;
