@@ -1,10 +1,10 @@
-name: Build and Minify TypeScript
+name: Build and Minify Quill Table Better
 
 on:
   push:
-    branches: [ "main" ] # Déclenche le workflow lors d'un push sur la branche main (ou celle que tu utilises)
-  pull_request:
-    branches: [ "main" ] # Déclenche le workflow lors d'une pull request ciblant la branche main
+    branches: [ "main" ]
+    paths:
+      - 'src/**'
 
 jobs:
   build:
@@ -23,13 +23,17 @@ jobs:
         run: npm install
 
       - name: Compile TypeScript
-        run: npx tsc
+        run: npm run build # Ou une commande similaire pour compiler le TypeScript
 
       - name: Minify JavaScript
-        run: npx terser dist/*.js -m -c > dist/bundle.min.js # Assure-toi d'ajuster les chemins si nécessaire
+        run: |
+          # Essaie de trouver le fichier JS de sortie et adapte la commande
+          find dist -name "*.js" -print0 | while IFS= read -r -d $'\0' file; do
+            npx terser "$file" -m -c -o "${file%.js}.min.js"
+          done
 
       - name: Upload minified JavaScript artifact
         uses: actions/upload-artifact@v4
         with:
-          name: minified-js
-          path: dist/bundle.min.js # Le chemin vers ton fichier JS minifié
+          name: quill-table-better-minified
+          path: dist/*.min.js # Chemin vers les fichiers JS minifiés
