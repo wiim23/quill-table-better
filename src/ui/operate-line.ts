@@ -412,6 +412,7 @@ class OperateLine {
   updateCell(node: Element) {
     if (!node) return;
     const isLine = this.isLine(node);
+    const scale = this.tableBetter.scale;
     const handleDrag = (e: MouseEvent) => {
       e.preventDefault();
       let clientX = (e.clientX / (scale * 100)) * 100;
@@ -429,8 +430,7 @@ class OperateLine {
     }
 
     const handleMouseup = (e: MouseEvent) => {      
-      e.preventDefault();
-      const scale = this.tableBetter.scale;
+      e.preventDefault();      
       const { cellNode, tableNode } = this.options;
       //let clientX = (e.clientX / (scale * 100)) * 100;
       //let clientY = (e.clientY / (scale * 100)) * 100;
