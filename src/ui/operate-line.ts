@@ -314,11 +314,11 @@ class OperateLine {
         }
       }
       for (const [node, width] of preNodes) {
-        let sWidth = (parseFloat(width) / (scale * 100)) * 100;
-        width = `${sWidth}`;
+        let cWidth = (parseFloat(width) / (scale * 100)) * 100;
+        let sWidth = `${cWidth}`;
         
-        setElementAttribute(node, { width });
-        setElementProperty(node as HTMLElement, { width: `${width}px` });
+        setElementAttribute(node, { sWidth });
+        setElementProperty(node as HTMLElement, { width: `${sWidth}px` });
       }
     }
     if (cell.nextElementSibling == null) {
