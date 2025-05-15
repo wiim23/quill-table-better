@@ -504,6 +504,8 @@ class OperateLine {
     let { top, left } = this.dragTable.getBoundingClientRect();
     top = (top / (scale * 100)) * 100;
     left = (left / (scale * 100)) * 100;
+    clientX = (clientX / (scale * 100)) * 100;
+    clientY = (clientY / (scale * 100)) * 100;
     
     const width = clientX - left;
     const height = clientY - top;
@@ -517,8 +519,7 @@ class OperateLine {
   updateProperty(options: Options) {
     const { containerProps, lineProps, dragBlockProps } = this.getProperty(options);
     if (!containerProps || !lineProps) return;
-    this.options = options;
-    console.log(containerProps, lineProps, options);
+    this.options = options;    
     setElementProperty(this.line, containerProps);
     setElementProperty(this.line.firstChild as HTMLElement, lineProps);
     setElementProperty(this.dragBlock, dragBlockProps);
