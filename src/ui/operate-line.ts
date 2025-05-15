@@ -161,6 +161,7 @@ class OperateLine {
     
     const x = sCellRect.left + sCellRect.width;
     const y = sCellRect.top + sCellRect.height;
+    console.log(x, y, mousePosition);
     const dragBlockProps = {
       width: `${DRAG_BLOCK_WIDTH}px`,
       height: `${DRAG_BLOCK_HEIGHT}px`,
