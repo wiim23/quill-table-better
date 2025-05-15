@@ -70,7 +70,7 @@ class OperateLine {
     const line = document.createElement('div');
     container.classList.add('ql-operate-line-container');
     const { containerProps, lineProps } = this.getProperty(this.options);
-    console.log({'la foire au boudin': {containerProps, lineProps}});
+    
     setElementProperty(container, containerProps);
     setElementProperty(line, lineProps);
     container.appendChild(line);
@@ -164,7 +164,7 @@ class OperateLine {
     
     const x = sCellRect.left + sCellRect.width;
     const y = sCellRect.top + sCellRect.height;
-    console.log(x, y, mousePosition);
+    
     const dragBlockProps = {
       width: `${DRAG_BLOCK_WIDTH}px`,
       height: `${DRAG_BLOCK_HEIGHT}px`,
@@ -227,10 +227,13 @@ class OperateLine {
     if (!this.quill.isEnabled()) return;
     const tableNode = (e.target as Element).closest('table');
     const cellNode = (e.target as Element).closest('td');
-    const mousePosition = {
+    let mousePosition = {
       clientX: e.clientX,
       clientY: e.clientY
     }
+    mousePosition.clientX = (mousePosition.clientX / (scale * 100)) * 100;
+    mousePosition.clientY = (mousePosition.clientY / (scale * 100)) * 100;
+    
     if (!tableNode || !cellNode) {
       if (this.line && !this.drag) {
         this.hideLine();
