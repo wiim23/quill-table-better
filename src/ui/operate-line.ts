@@ -314,9 +314,11 @@ class OperateLine {
         }
       }
       for (const [node, width] of preNodes) {
-        let sWidth = (width / (scale * 100)) * 100;
-        setElementAttribute(node, { sWidth });
-        setElementProperty(node as HTMLElement, { width: `${sWidth}px` });
+        let sWidth = (parseFloat(width) / (scale * 100)) * 100;
+        width = `${sWidth}`;
+        
+        setElementAttribute(node, { width });
+        setElementProperty(node as HTMLElement, { width: `${width}px` });
       }
     }
     if (cell.nextElementSibling == null) {
@@ -385,10 +387,11 @@ class OperateLine {
     
     for (const cell of cells) {
       const { top } = cell.getBoundingClientRect();
-      let sHeight = ~~(((clientY - top) / (scale * 100)) * 100);
-      
-      setElementAttribute(cell, { sHeight });
-      setElementProperty(cell as HTMLElement, { height: `${sHeight}px` });
+      let sHeight = (~~(clientY - top) / (scale * 100)) * 100;
+      let height = `${sHeight}`;
+       
+      setElementAttribute(cell, { height });
+      setElementProperty(cell as HTMLElement, { height: `${height}px` });
     }
   }
 
