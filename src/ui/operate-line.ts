@@ -267,6 +267,7 @@ class OperateLine {
 
   setCellLevelRect(cell: Element, clientX: number) {
     const scale = this.tableBetter.scale;
+    
     let { right } = cell.getBoundingClientRect();
     right = (right / (scale * 100)) * 100;
     
@@ -388,6 +389,7 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     const rowspan = ~~cell.getAttribute('rowspan') || 1;
     const cells = rowspan > 1 ? this.getVerticalCells(cell, rowspan) : cell.parentElement.children;
+    
     for (const cell of cells) {
       let { top } = cell.getBoundingClientRect();
       top = (top / (scale * 100)) * 100;
@@ -427,16 +429,19 @@ class OperateLine {
       e.preventDefault();
       const scale = this.tableBetter.scale;
       const { cellNode, tableNode } = this.options;
+      let clientX = (e.clientX / (scale * 100)) * 100;
+      let clientY = (e.clientY / (scale * 100)) * 100;
+      
       if (isLine) {
-        this.setCellRect(cellNode, e.clientX, e.clientY);
+        this.setCellRect(cellNode, clientX, clientY);
         this.toggleLineChildClass(false);
       } else {
         let { right, bottom } = tableNode.getBoundingClientRect();
         right = (right / (scale * 100)) * 100;
         bottom = (bottom / (scale * 100)) * 100;
         
-        const changeX = e.clientX - right;
-        const changeY = e.clientY - bottom;
+        const changeX = clientX - right;
+        const changeY = clientY - bottom;
         this.setCellsRect(cellNode, changeX, changeY);
         this.dragBlock.classList.remove('ql-operate-block-move');
         this.hideDragBlock();
@@ -475,6 +480,8 @@ class OperateLine {
       top: (containerRect.top / (scale * 100)) * 100,
       left: (containerRect.left / (scale * 100)) * 100      
     };
+    clientX = (clientX / (scale * 100)) * 100;
+    clientY = (clientY / (scale * 100)) * 100;
     
     this.dragBlock.classList.add('ql-operate-block-move');
     setElementProperty(this.dragBlock, {
