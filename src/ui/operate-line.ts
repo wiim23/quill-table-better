@@ -227,12 +227,10 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     const tableNode = (e.target as Element).closest('table');
     const cellNode = (e.target as Element).closest('td');
-    let mousePosition = {
+    const mousePosition = {
       clientX: e.clientX,
       clientY: e.clientY
     }
-    mousePosition.clientX = (mousePosition.clientX / (scale * 100)) * 100;
-    mousePosition.clientY = (mousePosition.clientY / (scale * 100)) * 100;
     
     if (!tableNode || !cellNode) {
       if (this.line && !this.drag) {
