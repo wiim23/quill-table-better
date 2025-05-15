@@ -433,14 +433,18 @@ class OperateLine {
       e.preventDefault();      
       const { cellNode, tableNode } = this.options;
       //let clientX = (e.clientX / (scale * 100)) * 100;
-      //let clientY = (e.clientY / (scale * 100)) * 100;
-      let clientX = parseFloat(this.dragBlock.style.left);
-      let clientY = parseFloat(this.dragBlock.style.top);
+      //let clientY = (e.clientY / (scale * 100)) * 100;      
       
       if (isLine) {
-        this.setCellRect(cellNode, clientX, clientY);
+        let lineX = parseFloat(this.line.style.left);
+        let lineY = parseFloat(this.line.style.top);
+        
+        this.setCellRect(cellNode, lineX, lineY);
         this.toggleLineChildClass(false);
       } else {
+        let clientX = parseFloat(this.dragBlock.style.left);
+        let clientY = parseFloat(this.dragBlock.style.top);
+        
         let { right, bottom } = tableNode.getBoundingClientRect();
         right = (right / (scale * 100)) * 100;
         bottom = (bottom / (scale * 100)) * 100;
