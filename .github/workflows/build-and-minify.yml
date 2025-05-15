@@ -25,12 +25,12 @@ jobs:
       - name: Compile TypeScript
         run: npm run build # Ou une commande similaire pour compiler le TypeScript
 
-      #- name: Minify JavaScript
-      #  run: |
+      - name: Minify JavaScript
+        run: |
           # Essaie de trouver le fichier JS de sortie et adapte la commande
-      #    find dist -name "*.js" -print0 | while IFS= read -r -d $'\0' file; do
-      #      npx terser "$file" -m -c -o "${file%.js}.min.js"
-      #    done
+          find dist -name "*.js" -print0 | while IFS= read -r -d $'\0' file; do
+            npx terser "$file" -m -c -o "${file%.js}.min.js"
+          done
 
       - name: Upload minified JavaScript artifact
         uses: actions/upload-artifact@v4
