@@ -238,16 +238,13 @@ class OperateLine {
       }
       return;
     }
-    let options = { tableNode, cellNode, mousePosition };
+    const options = { tableNode, cellNode, mousePosition };
     if (!this.line) {
       this.options = options;
       this.createOperateLine();
       this.createDragBlock();
     } else {
-      if (this.drag || !cellNode) return;
-      const scale = this.tableBetter.scale;
-      options.mousePosition.clientX = (options.mousePosition.clientX / (scale * 100)) * 100;
-      options.mousePosition.clientY = (options.mousePosition.clientY / (scale * 100)) * 100;      
+      if (this.drag || !cellNode) return;      
       this.updateProperty(options);
     }
   }
@@ -521,6 +518,7 @@ class OperateLine {
     const { containerProps, lineProps, dragBlockProps } = this.getProperty(options);
     if (!containerProps || !lineProps) return;
     this.options = options;
+    console.log(containerProps, lineProps, options);
     setElementProperty(this.line, containerProps);
     setElementProperty(this.line.firstChild as HTMLElement, lineProps);
     setElementProperty(this.dragBlock, dragBlockProps);
