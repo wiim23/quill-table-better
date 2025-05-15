@@ -391,10 +391,10 @@ class OperateLine {
     const cells = rowspan > 1 ? this.getVerticalCells(cell, rowspan) : cell.parentElement.children;
     
     for (const cell of cells) {
-      let { top } = cell.getBoundingClientRect();
-      top = (top / (scale * 100)) * 100;
+      let { top } = cell.getBoundingClientRect();      
+      let height = `${~~(clientY - top)}`;
+      height = (height / (scale * 100)) * 100;
       
-      const height = `${~~(clientY - top)}`;
       setElementAttribute(cell, { height });
       setElementProperty(cell as HTMLElement, { height: `${height}px` });
     }
@@ -432,25 +432,14 @@ class OperateLine {
     const handleMouseup = (e: MouseEvent) => {      
       e.preventDefault();      
       const { cellNode, tableNode } = this.options;
-      //let clientX = (e.clientX / (scale * 100)) * 100;
-      //let clientY = (e.clientY / (scale * 100)) * 100;      
       
-      if (isLine) {
-        let lineX = parseFloat(this.line.style.left);
-        let lineY = parseFloat(this.line.style.top);
-        
-        this.setCellRect(cellNode, lineX, lineY);
+      if (isLine) {        
+        this.setCellRect(cellNode, e.clientX, e.clientY);
         this.toggleLineChildClass(false);
-      } else {
-        let clientX = parseFloat(this.dragBlock.style.left);
-        let clientY = parseFloat(this.dragBlock.style.top);
-        
-        let { right, bottom } = tableNode.getBoundingClientRect();
-        right = (right / (scale * 100)) * 100;
-        bottom = (bottom / (scale * 100)) * 100;
-        
-        const changeX = clientX - right;
-        const changeY = clientY - bottom;
+      } else {        
+        let { right, bottom } = tableNode.getBoundingClientRect();        
+        const changeX = e.clientX - right;
+        const changeY = e.clientY - bottom;
         this.setCellsRect(cellNode, changeX, changeY);
         this.dragBlock.classList.remove('ql-operate-block-move');
         this.hideDragBlock();
