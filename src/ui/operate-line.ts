@@ -75,8 +75,7 @@ class OperateLine {
     container.appendChild(line);
     this.quill.container.appendChild(container);
     this.line = container;
-    this.updateCell(container);
-    console.log(this.tableBetter.scale);
+    this.updateCell(container);    
   }
 
   getCorrectCol(colgroup: TableColgroup, sum: number) {
@@ -88,8 +87,17 @@ class OperateLine {
   }
 
   getDragTableProperty(table: Element) {
+    const scale = this.tableBetter.scale;
     const { left, top, width, height } = table.getBoundingClientRect();
+    left = (left / (scale * 100)) * 100;
+    top = (top / (scale * 100)) * 100;
+    width = (width / (scale * 100)) * 100;
+    height = (height / (scale * 100)) * 100;
+    
     const containerRect = this.quill.container.getBoundingClientRect();
+    containerRect.top = (containerRect.top / (scale * 100)) * 100;
+    containerRect.left = (containerRect.left / (scale * 100)) * 100;
+    
     return {
       left: `${left - containerRect.left}px`,
       top: `${top - containerRect.top}px`,
@@ -122,11 +130,26 @@ class OperateLine {
   }
 
   getProperty(options: Options) {
+    const scale = this.tableBetter.scale;
     const containerRect = this.quill.container.getBoundingClientRect();
+    containerRect.top = (containerRect.top / (scale * 100)) * 100;
+    containerRect.bottom = (containerRect.bottom / (scale * 100)) * 100;
+    containerRect.left = (containerRect.left / (scale * 100)) * 100;
+    containerRect.height = (containerRect.height / (scale * 100)) * 100;
+    containerRect.width = (containerRect.width / (scale * 100)) * 100;
+    
     const { tableNode, cellNode, mousePosition } = options;
     const { clientX, clientY } = mousePosition;
     const tableRect = tableNode.getBoundingClientRect();
+    tableRect.right = (dragBlockProps.right / (scale * 100)) * 100;
+    tableRect.bottom = (dragBlockProps.bottom / (scale * 100)) * 100;
+    
     const cellRect = cellNode.getBoundingClientRect();
+    cellRect.left = (cellRect.left / (scale * 100)) * 100;
+    cellRect.width = (cellRect.width / (scale * 100)) * 100;
+    cellRect.top = (cellRect.top / (scale * 100)) * 100;
+    cellRect.height = (cellRect.height / (scale * 100)) * 100;
+    
     const x = cellRect.left + cellRect.width;
     const y = cellRect.top + cellRect.height;
     const dragBlockProps = {
@@ -136,6 +159,7 @@ class OperateLine {
       left: `${tableRect.right - containerRect.left}px`,
       display: tableRect.bottom > containerRect.bottom ? 'none' : 'block'
     }
+
     if (Math.abs(x - clientX) <= 5) {
       this.direction = 'level';
       return {
@@ -229,7 +253,10 @@ class OperateLine {
   }
 
   setCellLevelRect(cell: Element, clientX: number) {
+    const scale = this.tableBetter.scale;
     const { right } = cell.getBoundingClientRect();
+    right = (right / (scale * 100)) * 100;
+    
     const change = ~~(clientX - right);
     const colSum = this.getLevelColSum(cell);
     const tableBlot = (Quill.find(cell) as TableCell).table();
@@ -239,9 +266,13 @@ class OperateLine {
       const col = this.getCorrectCol(colgroup, colSum);
       const nextCol = col.next;
       const formats = col.formats()[col.statics.blotName];
+      formats['width'] = (formats['width'] / (scale * 100)) * 100;
+      
       col.domNode.setAttribute('width', `${parseFloat(formats['width']) + change}`);
       if (nextCol) {
         const nextFormats = nextCol.formats()[nextCol.statics.blotName];
+        nextFormats['width'] = (nextFormats['width'] / (scale * 100)) * 100;
+        
         nextCol.domNode.setAttribute('width', `${parseFloat(nextFormats['width']) - change}`);
       }
     } else {
@@ -253,6 +284,8 @@ class OperateLine {
         if (isLastCell) {
           const cell = cells[cells.length - 1];
           const { width } = cell.getBoundingClientRect();
+          width = (width / (scale * 100)) * 100;
+          
           preNodes.push([cell, `${~~(width + change)}`]);
           continue;
         }
@@ -263,9 +296,13 @@ class OperateLine {
           if (sum > colSum) break;
           if (sum === colSum) {
             const { width } = cell.getBoundingClientRect();
+            width = (width / (scale * 100)) * 100;
+            
             const nextCell = cell.nextElementSibling;
             if (!nextCell) continue;
             const { width: nextWidth } = nextCell.getBoundingClientRect();
+            nextWidth = (nextWidth / (scale * 100)) * 100;
+            
             preNodes.push([cell, `${~~(width + change)}`], [nextCell, `${~~(nextWidth - change)}`]);
           }
         }
@@ -289,6 +326,7 @@ class OperateLine {
   }
 
   setCellsRect(cell: Element, changeX: number, changeY: number) {
+    const scale = this.tableBetter.scale;
     const rows = cell.parentElement.parentElement.children;
     const maxColNum = this.getMaxColNum(cell);
     const averageX = changeX / maxColNum;
@@ -302,6 +340,9 @@ class OperateLine {
       for (const cell of cells) {
         const colspan = ~~cell.getAttribute('colspan') || 1;
         const { width, height } = cell.getBoundingClientRect();
+        width = (width / (scale * 100)) * 100;
+        height = (height / (scale * 100)) * 100;
+        
         preNodes.push([cell, `${Math.ceil(width + averageX * colspan)}`, `${Math.ceil(height + averageY)}`]);
       }
     }
@@ -313,6 +354,8 @@ class OperateLine {
       }
       while (col) {
         const { width } = col.domNode.getBoundingClientRect();
+        width = (width / (scale * 100)) * 100;
+        
         setElementAttribute(col.domNode, { width: `${Math.ceil(width + averageX)}` });
         col = col.next;
       }
@@ -329,17 +372,20 @@ class OperateLine {
   }
 
   setCellVerticalRect(cell: Element, clientY: number) {
+    const scale = this.tableBetter.scale;
     const rowspan = ~~cell.getAttribute('rowspan') || 1;
     const cells = rowspan > 1 ? this.getVerticalCells(cell, rowspan) : cell.parentElement.children;
     for (const cell of cells) {
       const { top } = cell.getBoundingClientRect();
+      top = (top / (scale * 100)) * 100;
+      
       const height = `${~~(clientY - top)}`;
       setElementAttribute(cell, { height });
       setElementProperty(cell as HTMLElement, { height: `${height}px` });
     }
   }
 
-  toggleLineChildClass(isAdd: boolean) {
+  toggleLineChildClass(isAdd: boolean) {    
     const node = this.line.firstElementChild;
     if (isAdd) {
       node.classList.add('ql-operate-line');
@@ -364,14 +410,18 @@ class OperateLine {
       }
     }
 
-    const handleMouseup = (e: MouseEvent) => {
+    const handleMouseup = (e: MouseEvent) => {      
       e.preventDefault();
+      const scale = this.tableBetter.scale;
       const { cellNode, tableNode } = this.options;
       if (isLine) {
         this.setCellRect(cellNode, e.clientX, e.clientY);
         this.toggleLineChildClass(false);
       } else {
         const { right, bottom } = tableNode.getBoundingClientRect();
+        right = (right / (scale * 100)) * 100;
+        bottom = (bottom / (scale * 100)) * 100;
+        
         const changeX = e.clientX - right;
         const changeY = e.clientY - bottom;
         this.setCellsRect(cellNode, changeX, changeY);
@@ -406,7 +456,11 @@ class OperateLine {
   }
 
   updateDragBlock(clientX: number, clientY: number) {
+    const scale = this.tableBetter.scale;
     const containerRect = this.quill.container.getBoundingClientRect();
+    containerRect.top = (containerRect.top / (scale * 100)) * 100;
+    containerRect.left = (containerRect.left / (scale * 100)) * 100;
+    
     this.dragBlock.classList.add('ql-operate-block-move');
     setElementProperty(this.dragBlock, {
       top: `${~~(clientY - containerRect.top - DRAG_BLOCK_HEIGHT / 2)}px`,
@@ -416,7 +470,11 @@ class OperateLine {
   }
 
   updateDragLine(clientX: number, clientY: number) {
+    const scale = this.tableBetter.scale;    
     const containerRect = this.quill.container.getBoundingClientRect();
+    containerRect.top = (containerRect.top / (scale * 100)) * 100;
+    containerRect.left = (containerRect.left / (scale * 100)) * 100;
+    
     if (this.direction === 'level') {
       setElementProperty(this.line, { left: `${~~(clientX - containerRect.left - LINE_CONTAINER_WIDTH / 2)}px` });
     } else if (this.direction === 'vertical') {
@@ -425,7 +483,11 @@ class OperateLine {
   }
 
   updateDragTable(clientX: number, clientY: number) {
+    const scale = this.tableBetter.scale;    
     const { top, left } = this.dragTable.getBoundingClientRect();
+    top = (top / (scale * 100)) * 100;
+    left = (left / (scale * 100)) * 100;
+    
     const width = clientX - left;
     const height = clientY - top;
     setElementProperty(this.dragTable, {
