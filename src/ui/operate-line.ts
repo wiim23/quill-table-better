@@ -238,14 +238,16 @@ class OperateLine {
       }
       return;
     }
-    const options = { tableNode, cellNode, mousePosition };
+    let options = { tableNode, cellNode, mousePosition };
     if (!this.line) {
       this.options = options;
       this.createOperateLine();
       this.createDragBlock();
     } else {
       if (this.drag || !cellNode) return;
-      console.log(options);
+      const scale = this.tableBetter.scale;
+      options.mousePosition.clientX = (options.mousePosition.clientX / (scale * 100)) * 100;
+      options.mousePosition.clientY = (options.mousePosition.clientY / (scale * 100)) * 100;      
       this.updateProperty(options);
     }
   }
