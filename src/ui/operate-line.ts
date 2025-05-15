@@ -76,7 +76,7 @@ class OperateLine {
     this.quill.container.appendChild(container);
     this.line = container;
     this.updateCell(container);
-    console.log(this.scale);
+    console.log(this.tableBetter.scale);
   }
 
   getCorrectCol(colgroup: TableColgroup, sum: number) {
