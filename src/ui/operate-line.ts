@@ -491,6 +491,8 @@ class OperateLine {
       top: (containerRect.top / (scale * 100)) * 100,
       left: (containerRect.left / (scale * 100)) * 100      
     };
+    clientX = (clientX / (scale * 100)) * 100;
+    clientY = (clientY / (scale * 100)) * 100;
     
     if (this.direction === 'level') {
       setElementProperty(this.line, { left: `${~~(clientX - sContainerRect.left - LINE_CONTAINER_WIDTH / 2)}px` });
