@@ -44,6 +44,7 @@ interface Options {
     singleWhiteList?: string[];
   }
   toolbarTable?: boolean;
+  scale?: number;
 }
 
 type Line = TableCellBlock | TableHeader | ListContainer;
