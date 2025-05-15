@@ -268,9 +268,7 @@ class OperateLine {
   setCellLevelRect(cell: Element, clientX: number) {
     const scale = this.tableBetter.scale;
     
-    let { right } = cell.getBoundingClientRect();
-    right = (right / (scale * 100)) * 100;
-    
+    const { right } = cell.getBoundingClientRect();
     const change = ~~(clientX - right);
     const colSum = this.getLevelColSum(cell);
     const tableBlot = (Quill.find(cell) as TableCell).table();
@@ -297,9 +295,7 @@ class OperateLine {
         const cells = row.children;
         if (isLastCell) {
           const cell = cells[cells.length - 1];
-          let { width } = cell.getBoundingClientRect();
-          width = (width / (scale * 100)) * 100;
-          
+          const { width } = cell.getBoundingClientRect();          
           preNodes.push([cell, `${~~(width + change)}`]);
           continue;
         }
@@ -309,21 +305,18 @@ class OperateLine {
           sum += colspan;
           if (sum > colSum) break;
           if (sum === colSum) {
-            let { width } = cell.getBoundingClientRect();
-            width = (width / (scale * 100)) * 100;
-            
+            const { width } = cell.getBoundingClientRect();
             const nextCell = cell.nextElementSibling;
             if (!nextCell) continue;
-            let { width: nextWidth } = nextCell.getBoundingClientRect();
-            nextWidth = (nextWidth / (scale * 100)) * 100;
-            
+            const { width: nextWidth } = nextCell.getBoundingClientRect();
             preNodes.push([cell, `${~~(width + change)}`], [nextCell, `${~~(nextWidth - change)}`]);
           }
         }
       }
       for (const [node, width] of preNodes) {
-        setElementAttribute(node, { width });
-        setElementProperty(node as HTMLElement, { width: `${width}px` });
+        let sWidth = (width / (scale * 100)) * 100;
+        setElementAttribute(node, { sWidth });
+        setElementProperty(node as HTMLElement, { width: `${sWidth}px` });
       }
     }
     if (cell.nextElementSibling == null) {
@@ -392,11 +385,10 @@ class OperateLine {
     
     for (const cell of cells) {
       const { top } = cell.getBoundingClientRect();
-      let sHeight = (~~(clientY - top) / (scale * 100)) * 100;
-      let height = `${sHeight}`;
+      let sHeight = ~~(((clientY - top) / (scale * 100)) * 100);
       
-      setElementAttribute(cell, { height });
-      setElementProperty(cell as HTMLElement, { height: `${height}px` });
+      setElementAttribute(cell, { sHeight });
+      setElementProperty(cell as HTMLElement, { height: `${sHeight}px` });
     }
   }
 
