@@ -43,7 +43,7 @@ class OperateLine {
     this.dragTable = null;
     this.direction = null; // 1.level 2.vertical
     this.tableBetter = tableBetter;
-    this.quill.root.addEventListener('mousemove', this.handleMouseMove.bind(this));
+    this.quill.root.addEventListener('mousemove', this.handleMouseMove.bind(this));    
   }
 
   createDragBlock() {
@@ -76,6 +76,7 @@ class OperateLine {
     this.quill.container.appendChild(container);
     this.line = container;
     this.updateCell(container);
+    console.log(this.scale);
   }
 
   getCorrectCol(colgroup: TableColgroup, sum: number) {
