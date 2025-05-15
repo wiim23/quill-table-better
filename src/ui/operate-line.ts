@@ -391,9 +391,9 @@ class OperateLine {
     const cells = rowspan > 1 ? this.getVerticalCells(cell, rowspan) : cell.parentElement.children;
     
     for (const cell of cells) {
-      let { top } = cell.getBoundingClientRect();      
-      let height = `${~~(clientY - top)}`;
-      height = (height / (scale * 100)) * 100;
+      const { top } = cell.getBoundingClientRect();
+      let sHeight = (~~(clientY - top) / (scale * 100)) * 100;
+      let height = `${sHeight}`;
       
       setElementAttribute(cell, { height });
       setElementProperty(cell as HTMLElement, { height: `${height}px` });
