@@ -224,6 +224,7 @@ class OperateLine {
 
   handleMouseMove(e: MouseEvent) {
     if (!this.quill.isEnabled()) return;
+    const scale = this.tableBetter.scale;
     const tableNode = (e.target as Element).closest('table');
     const cellNode = (e.target as Element).closest('td');
     let mousePosition = {
