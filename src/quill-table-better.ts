@@ -58,7 +58,11 @@ class Table extends Module {
   tableSelect: TableSelect;
   options: Options;
   public scale: number;
-  
+
+  public setScale(newScale: number): void {
+    this.scale = newScale;
+  }
+
   static keyboardBindings: { [propName: string]: BindingObject };
   
   static register() {
@@ -369,10 +373,6 @@ function removeLine(line: Line, range: Range) {
   tableModule?.tableMenus.updateMenus();
   this.quill.setSelection(range.index - 1, Quill.sources.SILENT);
   return false;
-}
-
-public setScale(newScale: number): void {
-  this.scale = newScale;
 }
   
 Table.keyboardBindings = keyboardBindings;
