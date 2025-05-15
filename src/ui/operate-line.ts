@@ -96,8 +96,8 @@ class OperateLine {
     
     let containerRect = this.quill.container.getBoundingClientRect();
     let sContainerRect = {
-      top = (containerRect.top / (scale * 100)) * 100,
-      left = (containerRect.left / (scale * 100)) * 100
+      top: (containerRect.top / (scale * 100)) * 100,
+      left: (containerRect.left / (scale * 100)) * 100
     }
     
     return {
@@ -146,8 +146,8 @@ class OperateLine {
     const { clientX, clientY } = mousePosition;
     let tableRect = tableNode.getBoundingClientRect();
     let sTableRect = {
-      right: (dragBlockProps.right / (scale * 100)) * 100,
-      bottom: (dragBlockProps.bottom / (scale * 100)) * 100
+      right: (tableRect.right / (scale * 100)) * 100,
+      bottom: (tableRect.bottom / (scale * 100)) * 100
     };
     
     let cellRect = cellNode.getBoundingClientRect();
