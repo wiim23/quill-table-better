@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npm install -g sass
-          npm install -g cssnano
+          npm install sass
+          npm install cssnano
 
       - name: Compile TypeScript
         run: npm run build
