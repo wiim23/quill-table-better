@@ -5,6 +5,8 @@ on:
     branches: [ "main" ]
     paths:
       - 'src/**'
+      - 'assets/**'
+  workflow_dispatch: # Ajout pour permettre le déclenchement manuel
 
 jobs:
   build:
@@ -20,21 +22,32 @@ jobs:
           node-version: 'lts/*'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install -g sass
+          npm install -g cssnano
 
       - name: Compile TypeScript
-        run: npm run build # Ou une commande similaire pour compiler le TypeScript
+        run: npm run build
 
-      - name: Minify JavaScript
+      - name: Compile Sass/CSS
         run: |
-          # Essaie de trouver le fichier JS de sortie et adapte la commande
+          sass assets/quill-table-better.scss dist/quill-table-better.css
+
+      - name: Minify CSS
+        run: |          
+          cssnano dist/quill-table-better.css -o dist/mon-style.min.css
+          
+      - name: Minify JavaScript
+        run: |          
           find dist -name "*.js" -print0 | while IFS= read -r -d $'\0' file; do
             npx terser "$file" -m -c -o "${file%.js}.min.js"
           done
 
-      - name: Upload minified JavaScript artifact
+      - name: Upload minified JavaScript an CSS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: quill-table-better-minified
-          #path: dist/*.min.js # Chemin vers les fichiers JS minifiés
-          path: dist/*.js
+          name: quill-table-better-dist
+          path: |
+            dist/*.min.js
+            dist/*.min.css
