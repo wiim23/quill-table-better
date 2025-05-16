@@ -5,7 +5,6 @@ on:
     branches: [ "main" ]
     paths:
       - 'src/**'
-      - 'assets/css/**'
   workflow_dispatch: # Ajout pour permettre le déclenchement manuel
 
 jobs:
@@ -32,7 +31,7 @@ jobs:
 
       - name: Compile Sass/CSS
         run: |
-          sass assets/css/quill-table-better.scss dist/quill-table-better.css
+          sass src/assets/css/quill-table-better.scss dist/quill-table-better.css
 
       - name: Minify CSS
         run: |          
