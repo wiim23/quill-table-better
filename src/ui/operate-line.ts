@@ -309,11 +309,11 @@ class OperateLine {
           }
         }
       }
-      for (const [node, width] of preNodes) {
+      for (let [node, width] of preNodes) {        
         let cWidth = (parseFloat(width) / (scale * 100)) * 100;
         let sWidth = `${cWidth}`;
         
-        setElementAttribute(node, { style: `width: ${sWidth};` });
+        setElementAttribute(node, { width: sWidth });
         setElementProperty(node as HTMLElement, { width: `${sWidth}px` });
       }
     }
@@ -362,7 +362,7 @@ class OperateLine {
         col = col.next;
       }
     } else {
-      for (const [node, width, height] of preNodes) {
+      for (const [node, width, height] of preNodes) {        
         setElementAttribute(node, { width, height });
         setElementProperty(node as HTMLElement, {
           width: `${width}px`,
