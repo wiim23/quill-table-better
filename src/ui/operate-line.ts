@@ -278,10 +278,16 @@ class OperateLine {
       const col = this.getCorrectCol(colgroup, colSum);
       const nextCol = col.next;
       const formats = col.formats()[col.statics.blotName];      
-      col.domNode.setAttribute('width', `${parseFloat(formats['width']) + change}`);
+      let cWidth = ((parseFloat(formats['width']) + change) / (scale * 100)) * 100;
+      let sWidth = `${cWidth}`;
+      
+      col.domNode.setAttribute('width', sWidth);
       if (nextCol) {
         const nextFormats = nextCol.formats()[nextCol.statics.blotName];
-        nextCol.domNode.setAttribute('width', `${parseFloat(nextFormats['width']) - change}`);
+        cWidth = ((parseFloat(nextFormats['width']) - change) / (scale * 100)) * 100;
+        sWidth = `${cWidth}`;
+        
+        nextCol.domNode.setAttribute('width', sWidth);
       }
     } else {
       const isLastCell = cell.nextElementSibling == null;
@@ -311,10 +317,10 @@ class OperateLine {
       }
       for (let [node, width] of preNodes) {        
         let cWidth = (parseFloat(width) / (scale * 100)) * 100;
-        let sWidth = `${cWidth}`;
+        let sWidth = `${cWidth}px`;
         
-        setElementAttribute(node, { width: sWidth });
-        setElementProperty(node as HTMLElement, { width: `${sWidth}px` });
+        setElementAttribute(node, { width: cWidth.toString() });
+        setElementProperty(node as HTMLElement, { width: sWidth });
       }
     }
     if (cell.nextElementSibling == null) {
@@ -336,12 +342,14 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     const rows = cell.parentElement.parentElement.children;
     const maxColNum = this.getMaxColNum(cell);
-    const averageX = changeX / maxColNum;
-    const averageY = changeY / rows.length;
+    let averageX = changeX / maxColNum;
+    averageX = (averageX / (scale * 100)) * 100;
+    let averageY = changeY / rows.length;
+    averageY = (averageY / (scale * 100)) * 100;
     const preNodes: [Element, string, string][] = [];
     const tableBlot = (Quill.find(cell) as TableCell).table();
     const colgroup = tableBlot.colgroup() as TableColgroup;
-    const bounds = tableBlot.domNode.getBoundingClientRect();
+    let bounds = tableBlot.domNode.getBoundingClientRect();
     for (const row of rows) {
       const cells = row.children;
       for (const cell of cells) {
@@ -352,9 +360,12 @@ class OperateLine {
     }
     if (colgroup) {
       let col = colgroup.children.head;
-      for (const [node, , height] of preNodes) {
-        setElementAttribute(node, { height });
-        setElementProperty(node as HTMLElement, { height: `${height}px` });
+      for (const [node, , height] of preNodes) {        
+        let cHeight = (parseFloat(height) / (scale * 100)) * 100;
+        let sHeight = `${cHeight}px`;
+        
+        setElementAttribute(node, { height: cHeight.toString() });
+        setElementProperty(node as HTMLElement, { height: sHeight });
       }
       while (col) {
         let { width } = col.domNode.getBoundingClientRect();
@@ -365,14 +376,23 @@ class OperateLine {
       }
     } else {
       for (const [node, width, height] of preNodes) {        
-        setElementAttribute(node, { width, height });
+        let cWidth = (parseFloat(width) / (scale * 100)) * 100;
+        let sWidth = `${cWidth}px`;
+        let cHeight = (parseFloat(height) / (scale * 100)) * 100;
+        let sHeight = `${cHeight}px`;
+        
+        setElementAttribute(node, { width: cWidth.toString(), height: cHeight.toString() });
         setElementProperty(node as HTMLElement, {
-          width: `${width}px`,
-          height: `${height}px`
+          width: sWidth,
+          height: sHeight
         });
       }
     }
-    updateTableWidth(tableBlot.domNode, bounds, changeX);
+
+    let change = (changeX / (scale * 100)) * 100;
+    bounds.width = (bounds.width / (scale * 100)) * 100;
+    
+    updateTableWidth(tableBlot.domNode, bounds, change);
   }
 
   setCellVerticalRect(cell: Element, clientY: number) {
@@ -383,10 +403,10 @@ class OperateLine {
     for (const cell of cells) {
       const { top } = cell.getBoundingClientRect();
       let sHeight = (~~(clientY - top) / (scale * 100)) * 100;
-      let height = `${sHeight}`;
+      let cHeight = `${sHeight}px`;
        
-      setElementAttribute(cell, { height });
-      setElementProperty(cell as HTMLElement, { height: `${height}px` });
+      setElementAttribute(cell, { height: sHeight.toString() });
+      setElementProperty(cell as HTMLElement, { height: cHeight });
     }
   }
 
