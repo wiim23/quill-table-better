@@ -269,11 +269,11 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     
     const { right } = cell.getBoundingClientRect();
-    const change = ~~(clientX - right);
+    let change = ~~(clientX - right);
     const colSum = this.getLevelColSum(cell);
     const tableBlot = (Quill.find(cell) as TableCell).table();
     const colgroup = tableBlot.colgroup() as TableColgroup;
-    const bounds = tableBlot.domNode.getBoundingClientRect();
+    let bounds = tableBlot.domNode.getBoundingClientRect();
     if (colgroup) {
       const col = this.getCorrectCol(colgroup, colSum);
       const nextCol = col.next;
@@ -318,6 +318,8 @@ class OperateLine {
       }
     }
     if (cell.nextElementSibling == null) {
+      change = (change / (scale * 100)) * 100;
+      bounds.width = (bounds.width / (scale * 100)) * 100;
       updateTableWidth(tableBlot.domNode, bounds, change);
     }
   }
