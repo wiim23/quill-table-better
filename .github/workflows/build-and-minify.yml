@@ -24,7 +24,7 @@ jobs:
         run: |
           npm install
           npm install sass
-          npm install cssnano
+          npm install cssnano postcss --save-dev
 
       - name: Compile TypeScript
         run: npm run build
@@ -35,7 +35,7 @@ jobs:
 
       - name: Minify CSS
         run: |          
-          ./node_modules/.bin/cssnano dist/quill-table-better.css -o dist/mon-style.min.css
+          npx cssnano dist/quill-table-better.css -o dist/mon-style.min.css
           
       - name: Minify JavaScript
         run: |          
