@@ -35,7 +35,7 @@ jobs:
 
       - name: Minify CSS
         run: |          
-          npx cssnano dist/quill-table-better.css -o dist/mon-style.min.css
+          ./node_modules/.bin/cssnano/cssnano dist/quill-table-better.css -o dist/mon-style.min.css
           
       - name: Minify JavaScript
         run: |          
