@@ -31,11 +31,11 @@ jobs:
 
       - name: Compile Sass/CSS
         run: |
-          sass src/assets/css/quill-table-better.scss dist/quill-table-better.css
+          npx sass src/assets/css/quill-table-better.scss dist/quill-table-better.css
 
       - name: Minify CSS
         run: |          
-          cssnano dist/quill-table-better.css -o dist/mon-style.min.css
+          npx cssnano dist/quill-table-better.css -o dist/mon-style.min.css
           
       - name: Minify JavaScript
         run: |          
