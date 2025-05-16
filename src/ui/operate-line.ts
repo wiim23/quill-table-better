@@ -277,14 +277,10 @@ class OperateLine {
     if (colgroup) {
       const col = this.getCorrectCol(colgroup, colSum);
       const nextCol = col.next;
-      let formats = col.formats()[col.statics.blotName];
-      formats['width'] = (formats['width'] / (scale * 100)) * 100;
-      
+      const formats = col.formats()[col.statics.blotName];      
       col.domNode.setAttribute('width', `${parseFloat(formats['width']) + change}`);
       if (nextCol) {
-        let nextFormats = nextCol.formats()[nextCol.statics.blotName];
-        nextFormats['width'] = (nextFormats['width'] / (scale * 100)) * 100;
-        
+        const nextFormats = nextCol.formats()[nextCol.statics.blotName];
         nextCol.domNode.setAttribute('width', `${parseFloat(nextFormats['width']) - change}`);
       }
     } else {
@@ -317,7 +313,7 @@ class OperateLine {
         let cWidth = (parseFloat(width) / (scale * 100)) * 100;
         let sWidth = `${cWidth}`;
         
-        setElementAttribute(node, { sWidth });
+        setElementAttribute(node, { style: `width: ${sWidth};` });
         setElementProperty(node as HTMLElement, { width: `${sWidth}px` });
       }
     }
@@ -348,10 +344,7 @@ class OperateLine {
       const cells = row.children;
       for (const cell of cells) {
         const colspan = ~~cell.getAttribute('colspan') || 1;
-        let { width, height } = cell.getBoundingClientRect();
-        width = (width / (scale * 100)) * 100;
-        height = (height / (scale * 100)) * 100;
-        
+        const { width, height } = cell.getBoundingClientRect();
         preNodes.push([cell, `${Math.ceil(width + averageX * colspan)}`, `${Math.ceil(height + averageY)}`]);
       }
     }
