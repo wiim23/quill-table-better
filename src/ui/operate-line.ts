@@ -495,7 +495,7 @@ class OperateLine {
       top: `${~~(sClientY - sContainerRect.top - DRAG_BLOCK_HEIGHT / 2)}px`,
       left: `${~~(sClientX - sContainerRect.left - DRAG_BLOCK_WIDTH / 2)}px`
     });
-    this.updateDragTable(sClientX, sClientY);
+    this.updateDragTable(clientX, clientY);
   }
 
   updateDragLine(clientX: number, clientY: number) {
@@ -516,15 +516,11 @@ class OperateLine {
     }
   }
 
-  updateDragTable(clientX: number, clientY: number) {
-    const scale = this.tableBetter.scale;
-    let sClientX = ~~((clientX / (scale * 100)) * 100);
-    let sClientY = ~~((clientY / (scale * 100)) * 100);
-    
+  updateDragTable(clientX: number, clientY: number) {    
     let { top, left } = this.dragTable.getBoundingClientRect();
     
-    const width = sClientX - left;
-    const height = sClientY - top;
+    const width = clientX - left;
+    const height = clientY - top;
     setElementProperty(this.dragTable, {
       width: `${width}px`,
       height: `${height}px`,
