@@ -423,36 +423,31 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     const handleDrag = (e: MouseEvent) => {
       e.preventDefault();
-      let clientX = ~~((e.clientX / (scale * 100)) * 100);
-      let clientY = ~~((e.clientY / (scale * 100)) * 100);
       
       if (this.drag) {
         if (isLine) {
-          this.updateDragLine(clientX, clientY);
+          this.updateDragLine(e.clientX, e.clientY);
           this.hideDragBlock();
         } else {
-          this.updateDragBlock(clientX, clientY);
+          this.updateDragBlock(e.clientX, e.clientY);
           this.hideLine();
         }
       }
     }
 
     const handleMouseup = (e: MouseEvent) => {      
-      e.preventDefault();  
-      let clientX = ~~((e.clientX / (scale * 100)) * 100);
-      let clientY = ~~((e.clientY / (scale * 100)) * 100);
-      
+      e.preventDefault();        
       const { cellNode, tableNode } = this.options;
       
       if (isLine) {        
-        this.setCellRect(cellNode, clientX, clientY);
+        this.setCellRect(cellNode, e.clientX, e.clientY);
         this.toggleLineChildClass(false);
       } else {        
         let { right, bottom } = tableNode.getBoundingClientRect();        
         right = ~~((right / (scale * 100)) * 100);
         bottom = ~~((bottom / (scale * 100)) * 100);
-        const changeX = clientX - right;
-        const changeY = clientY - bottom;
+        const changeX = e.clientX - right;
+        const changeY = e.clientY - bottom;
         this.setCellsRect(cellNode, changeX, changeY);
         this.dragBlock.classList.remove('ql-operate-block-move');
         this.hideDragBlock();
@@ -486,6 +481,9 @@ class OperateLine {
 
   updateDragBlock(clientX: number, clientY: number) {
     const scale = this.tableBetter.scale;
+    let sClientX = ~~((clientX / (scale * 100)) * 100);
+    let sClientY = ~~((clientY / (scale * 100)) * 100);
+    
     let containerRect = this.quill.container.getBoundingClientRect();
     let sContainerRect = {
       top: ~~((containerRect.top / (scale * 100)) * 100),
@@ -494,14 +492,17 @@ class OperateLine {
     
     this.dragBlock.classList.add('ql-operate-block-move');
     setElementProperty(this.dragBlock, {
-      top: `${~~(clientY - sContainerRect.top - DRAG_BLOCK_HEIGHT / 2)}px`,
-      left: `${~~(clientX - sContainerRect.left - DRAG_BLOCK_WIDTH / 2)}px`
+      top: `${~~(sClientY - sContainerRect.top - DRAG_BLOCK_HEIGHT / 2)}px`,
+      left: `${~~(sClientX - sContainerRect.left - DRAG_BLOCK_WIDTH / 2)}px`
     });
-    this.updateDragTable(clientX, clientY);
+    this.updateDragTable(sClientX, sClientY);
   }
 
   updateDragLine(clientX: number, clientY: number) {
-    const scale = this.tableBetter.scale;    
+    const scale = this.tableBetter.scale;
+    let sClientX = ~~((clientX / (scale * 100)) * 100);
+    let sClientY = ~~((clientY / (scale * 100)) * 100);
+    
     let containerRect = this.quill.container.getBoundingClientRect();
     let sContainerRect = {
       top: ~~((containerRect.top / (scale * 100)) * 100),
@@ -509,17 +510,14 @@ class OperateLine {
     };
     
     if (this.direction === 'level') {
-      setElementProperty(this.line, { left: `${~~(clientX - sContainerRect.left - LINE_CONTAINER_WIDTH / 2)}px` });
+      setElementProperty(this.line, { left: `${~~(sClientX - sContainerRect.left - LINE_CONTAINER_WIDTH / 2)}px` });
     } else if (this.direction === 'vertical') {
-      setElementProperty(this.line, { top: `${(~~clientY - sContainerRect.top - LINE_CONTAINER_HEIGHT / 2)}px` });
+      setElementProperty(this.line, { top: `${~~(sClientY - sContainerRect.top - LINE_CONTAINER_HEIGHT / 2)}px` });
     }
   }
 
   updateDragTable(clientX: number, clientY: number) {
-    const scale = this.tableBetter.scale;    
     let { top, left } = this.dragTable.getBoundingClientRect();
-    top = ~~((top / (scale * 100)) * 100);
-    left = ~~((left / (scale * 100)) * 100);
     
     const width = clientX - left;
     const height = clientY - top;
