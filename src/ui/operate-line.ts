@@ -443,9 +443,7 @@ class OperateLine {
         this.setCellRect(cellNode, e.clientX, e.clientY);
         this.toggleLineChildClass(false);
       } else {        
-        let { right, bottom } = tableNode.getBoundingClientRect();        
-        right = ~~((right / (scale * 100)) * 100);
-        bottom = ~~((bottom / (scale * 100)) * 100);
+        const { right, bottom } = tableNode.getBoundingClientRect();        
         const changeX = e.clientX - right;
         const changeY = e.clientY - bottom;
         this.setCellsRect(cellNode, changeX, changeY);
