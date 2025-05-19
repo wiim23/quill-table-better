@@ -522,6 +522,8 @@ class OperateLine {
     let sClientY = ~~((clientY / (scale * 100)) * 100);
     
     let { top, left } = this.dragTable.getBoundingClientRect();
+    top = ~~((top / (scale * 100)) * 100);
+    left = ~~((left / (scale * 100)) * 100);
     
     const width = sClientX - left;
     const height = sClientY - top;
