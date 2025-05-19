@@ -342,10 +342,8 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     const rows = cell.parentElement.parentElement.children;
     const maxColNum = this.getMaxColNum(cell);
-    let averageX = changeX / maxColNum;
-    averageX = ~~((averageX / (scale * 100)) * 100);
-    let averageY = changeY / rows.length;
-    averageY = ~~((averageY / (scale * 100)) * 100);
+    const averageX = changeX / maxColNum;   
+    const averageY = changeY / rows.length;    
     const preNodes: [Element, string, string][] = [];
     const tableBlot = (Quill.find(cell) as TableCell).table();
     const colgroup = tableBlot.colgroup() as TableColgroup;
@@ -440,16 +438,21 @@ class OperateLine {
     }
 
     const handleMouseup = (e: MouseEvent) => {      
-      e.preventDefault();      
+      e.preventDefault();  
+      let clientX = ~~((e.clientX / (scale * 100)) * 100);
+      let clientY = ~~((e.clientY / (scale * 100)) * 100);
+      
       const { cellNode, tableNode } = this.options;
       
       if (isLine) {        
-        this.setCellRect(cellNode, e.clientX, e.clientY);
+        this.setCellRect(cellNode, clientX, clientY);
         this.toggleLineChildClass(false);
       } else {        
         let { right, bottom } = tableNode.getBoundingClientRect();        
-        const changeX = e.clientX - right;
-        const changeY = e.clientY - bottom;
+        right = ~~((right / (scale * 100)) * 100);
+        bottom = ~~((bottom / (scale * 100)) * 100);
+        const changeX = clientX - right;
+        const changeY = clientY - bottom;
         this.setCellsRect(cellNode, changeX, changeY);
         this.dragBlock.classList.remove('ql-operate-block-move');
         this.hideDragBlock();
