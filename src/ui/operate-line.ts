@@ -89,15 +89,15 @@ class OperateLine {
   getDragTableProperty(table: Element) {
     const scale = this.tableBetter.scale;
     let { left, top, width, height } = table.getBoundingClientRect();
-    left = (left / (scale * 100)) * 100;
-    top = (top / (scale * 100)) * 100;
-    width = (width / (scale * 100)) * 100;
-    height = (height / (scale * 100)) * 100;
+    left = ~~((left / (scale * 100)) * 100);
+    top = ~~((top / (scale * 100)) * 100);
+    width = ~~((width / (scale * 100)) * 100);
+    height = ~~((height / (scale * 100)) * 100);
     
     let containerRect = this.quill.container.getBoundingClientRect();
     let sContainerRect = {
-      top: (containerRect.top / (scale * 100)) * 100,
-      left: (containerRect.left / (scale * 100)) * 100
+      top: ~~((containerRect.top / (scale * 100)) * 100),
+      left: ~~((containerRect.left / (scale * 100)) * 100)
     }
     
     return {
@@ -135,30 +135,30 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     let containerRect = this.quill.container.getBoundingClientRect();
     let sContainerRect = {
-      top: (containerRect.top / (scale * 100)) * 100,
-      bottom: (containerRect.bottom / (scale * 100)) * 100,
-      left: (containerRect.left / (scale * 100)) * 100,
-      height: (containerRect.height / (scale * 100)) * 100,
-      width: (containerRect.width / (scale * 100)) * 100    
+      top: ~~((containerRect.top / (scale * 100)) * 100),
+      bottom: ~~((containerRect.bottom / (scale * 100)) * 100),
+      left: ~~((containerRect.left / (scale * 100)) * 100),
+      height: ~~((containerRect.height / (scale * 100)) * 100),
+      width: ~~((containerRect.width / (scale * 100)) * 100)
     }
     
     const { tableNode, cellNode, mousePosition } = options;
     let { clientX, clientY } = mousePosition;
-    clientX = (clientX / (scale * 100)) * 100;
-    clientY = (clientY / (scale * 100)) * 100;
+    clientX = ~~((clientX / (scale * 100)) * 100);
+    clientY = ~~((clientY / (scale * 100)) * 100);
     
     let tableRect = tableNode.getBoundingClientRect();
     let sTableRect = {
-      right: (tableRect.right / (scale * 100)) * 100,
-      bottom: (tableRect.bottom / (scale * 100)) * 100
+      right: ~~((tableRect.right / (scale * 100)) * 100),
+      bottom: ~~((tableRect.bottom / (scale * 100)) * 100)
     };
     
     let cellRect = cellNode.getBoundingClientRect();
     let sCellRect = {
-      left: (cellRect.left / (scale * 100)) * 100,
-      width: (cellRect.width / (scale * 100)) * 100,
-      top: (cellRect.top / (scale * 100)) * 100,
-      height: (cellRect.height / (scale * 100)) * 100
+      left: ~~((cellRect.left / (scale * 100)) * 100),
+      width: ~~((cellRect.width / (scale * 100)) * 100),
+      top: ~~((cellRect.top / (scale * 100)) * 100),
+      height: ~~((cellRect.height / (scale * 100)) * 100)
     };
     
     const x = sCellRect.left + sCellRect.width;
@@ -278,13 +278,13 @@ class OperateLine {
       const col = this.getCorrectCol(colgroup, colSum);
       const nextCol = col.next;
       const formats = col.formats()[col.statics.blotName];      
-      let cWidth = ((parseFloat(formats['width']) + change) / (scale * 100)) * 100;
+      let cWidth = ~~(((parseFloat(formats['width']) + change) / (scale * 100)) * 100);
       let sWidth = `${cWidth}`;
       
       col.domNode.setAttribute('width', sWidth);
       if (nextCol) {
         const nextFormats = nextCol.formats()[nextCol.statics.blotName];
-        cWidth = ((parseFloat(nextFormats['width']) - change) / (scale * 100)) * 100;
+        cWidth = ~~(((parseFloat(nextFormats['width']) - change) / (scale * 100)) * 100);
         sWidth = `${cWidth}`;
         
         nextCol.domNode.setAttribute('width', sWidth);
@@ -316,7 +316,7 @@ class OperateLine {
         }
       }
       for (let [node, width] of preNodes) {        
-        let cWidth = (parseFloat(width) / (scale * 100)) * 100;
+        let cWidth = ~~((parseFloat(width) / (scale * 100)) * 100);
         let sWidth = `${cWidth}px`;
         
         setElementAttribute(node, { width: cWidth.toString() });
@@ -324,8 +324,8 @@ class OperateLine {
       }
     }
     if (cell.nextElementSibling == null) {
-      change = (change / (scale * 100)) * 100;
-      bounds.width = (bounds.width / (scale * 100)) * 100;
+      change = ~~((change / (scale * 100)) * 100);
+      bounds.width = ~~((bounds.width / (scale * 100)) * 100);
       updateTableWidth(tableBlot.domNode, bounds, change);
     }
   }
@@ -343,9 +343,9 @@ class OperateLine {
     const rows = cell.parentElement.parentElement.children;
     const maxColNum = this.getMaxColNum(cell);
     let averageX = changeX / maxColNum;
-    averageX = (averageX / (scale * 100)) * 100;
+    averageX = ~~((averageX / (scale * 100)) * 100);
     let averageY = changeY / rows.length;
-    averageY = (averageY / (scale * 100)) * 100;
+    averageY = ~~((averageY / (scale * 100)) * 100);
     const preNodes: [Element, string, string][] = [];
     const tableBlot = (Quill.find(cell) as TableCell).table();
     const colgroup = tableBlot.colgroup() as TableColgroup;
@@ -361,7 +361,7 @@ class OperateLine {
     if (colgroup) {
       let col = colgroup.children.head;
       for (const [node, , height] of preNodes) {        
-        let cHeight = (parseFloat(height) / (scale * 100)) * 100;
+        let cHeight = ~~((parseFloat(height) / (scale * 100)) * 100);
         let sHeight = `${cHeight}px`;
         
         setElementAttribute(node, { height: cHeight.toString() });
@@ -369,16 +369,16 @@ class OperateLine {
       }
       while (col) {
         let { width } = col.domNode.getBoundingClientRect();
-        width = (width / (scale * 100)) * 100;
+        width = ~~((width / (scale * 100)) * 100);
         
         setElementAttribute(col.domNode, { width: `${Math.ceil(width + averageX)}` });
         col = col.next;
       }
     } else {
       for (const [node, width, height] of preNodes) {        
-        let cWidth = (parseFloat(width) / (scale * 100)) * 100;
+        let cWidth = ~~((parseFloat(width) / (scale * 100)) * 100);
         let sWidth = `${cWidth}px`;
-        let cHeight = (parseFloat(height) / (scale * 100)) * 100;
+        let cHeight = ~~((parseFloat(height) / (scale * 100)) * 100);
         let sHeight = `${cHeight}px`;
         
         setElementAttribute(node, { width: cWidth.toString(), height: cHeight.toString() });
@@ -389,8 +389,8 @@ class OperateLine {
       }
     }
 
-    let change = (changeX / (scale * 100)) * 100;
-    bounds.width = (bounds.width / (scale * 100)) * 100;
+    let change = ~~((changeX / (scale * 100)) * 100);
+    bounds.width = ~~((bounds.width / (scale * 100)) * 100);
     
     updateTableWidth(tableBlot.domNode, bounds, change);
   }
@@ -402,7 +402,7 @@ class OperateLine {
     
     for (const cell of cells) {
       const { top } = cell.getBoundingClientRect();
-      let sHeight = (~~(clientY - top) / (scale * 100)) * 100;
+      let sHeight = ~~((~~(clientY - top) / (scale * 100)) * 100);
       let cHeight = `${sHeight}px`;
        
       setElementAttribute(cell, { height: sHeight.toString() });
@@ -425,8 +425,8 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     const handleDrag = (e: MouseEvent) => {
       e.preventDefault();
-      let clientX = (e.clientX / (scale * 100)) * 100;
-      let clientY = (e.clientY / (scale * 100)) * 100;
+      let clientX = ~~((e.clientX / (scale * 100)) * 100);
+      let clientY = ~~((e.clientY / (scale * 100)) * 100);
       
       if (this.drag) {
         if (isLine) {
@@ -485,8 +485,8 @@ class OperateLine {
     const scale = this.tableBetter.scale;
     let containerRect = this.quill.container.getBoundingClientRect();
     let sContainerRect = {
-      top: (containerRect.top / (scale * 100)) * 100,
-      left: (containerRect.left / (scale * 100)) * 100      
+      top: ~~((containerRect.top / (scale * 100)) * 100),
+      left: ~~((containerRect.left / (scale * 100)) * 100)
     };
     
     this.dragBlock.classList.add('ql-operate-block-move');
@@ -501,8 +501,8 @@ class OperateLine {
     const scale = this.tableBetter.scale;    
     let containerRect = this.quill.container.getBoundingClientRect();
     let sContainerRect = {
-      top: (containerRect.top / (scale * 100)) * 100,
-      left: (containerRect.left / (scale * 100)) * 100      
+      top: ~~((containerRect.top / (scale * 100)) * 100),
+      left: ~~((containerRect.left / (scale * 100)) * 100)
     };
     
     if (this.direction === 'level') {
@@ -515,8 +515,8 @@ class OperateLine {
   updateDragTable(clientX: number, clientY: number) {
     const scale = this.tableBetter.scale;    
     let { top, left } = this.dragTable.getBoundingClientRect();
-    top = (top / (scale * 100)) * 100;
-    left = (left / (scale * 100)) * 100;
+    top = ~~((top / (scale * 100)) * 100);
+    left = ~~((left / (scale * 100)) * 100);
     
     const width = clientX - left;
     const height = clientY - top;
