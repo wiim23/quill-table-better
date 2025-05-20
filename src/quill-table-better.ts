@@ -60,10 +60,6 @@ class Table extends Module {
   options: Options;
   public scale: number;
 
-  public setScale(newScale: number): void {
-    this.scale = newScale;
-  }
-
   static keyboardBindings: { [propName: string]: BindingObject };
   
   static register() {
